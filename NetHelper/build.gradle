@@ -27,7 +27,7 @@ dependencies {
 }
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-boolean hasCredentials = hasProperty('sonatypeUsername') && hasProperty('sonatypeUsername')
+boolean hasCredentials = hasProperty('sonatypeUsername') && hasProperty('sonatypePassword')
 
 signing {
     required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
