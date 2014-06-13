@@ -1,24 +1,17 @@
 apply plugin: 'android-library'
 apply plugin: 'android-maven'
-apply plugin: 'signing'
 
-allprojects {
-    version = "1.0.0"
-    group = "com.sopinet.android"
-
-    project.ext {
-        versionCode = 1
-    }
-}
+version = "1.0.0"
+group = "com.sopinet"
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 19
-        versionCode project.ext.versionCode
+        versionCode 1
         versionName version
     }
     buildTypes {
@@ -35,76 +28,4 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-boolean hasCredentials = hasProperty('sonatypeUsername') && hasProperty('sonatypePassword')
-
-signing {
-    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
-}
-
-uploadArchives {
-    configuration = configurations.archives
-
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                if (hasCredentials) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-            }
-
-            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                if (hasCredentials) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-            }
-
-            pom.project {
-                name 'SopinetNetHelper'
-                description 'NetHelper Android Library'
-                url 'https://github.com/sopinet'
-
-                scm {
-                    url 'https://github.com/sopinet/android-nethelper'
-                    connection 'scm:git://github.com/sopinet/android-nethelper.git'
-                    developerConnection 'scm:git://github.com/sopinet/android-nethelper.git'
-                }
-
-                licenses {
-                    license {
-                        name 'GPL-20'
-                        url 'http://www.gnu.org/licenses/gpl-2.0.html'
-                        distribution 'repo'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'hidabe'
-                        name 'Fernando Hidalgo'
-                        email 'fhidalgo@sopinet.com'
-                    }
-                }
-
-                organization {
-                    name 'Sopinet'
-                    url 'http://www.sopinet.com'
-                }
-
-                issueManagement {
-                    system 'GitHub Issues'
-                    url 'https://github.com/sopinet/android-nethelper/issues'
-                }
-
-                parent {
-                    groupId 'org.sonatype.oss'
-                    artifactId 'oss-parent'
-                    version 7
-                }
-            }
-        }
-    }
-}
+apply from: '../maven_push.gradle'
