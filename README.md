@@ -32,9 +32,9 @@ Include in manifiest:
 ```
 Use it:
 ```
-SimpleContent sc = new SimpleContent(this, "waydo", 0);
+SimpleContent sc = new SimpleContent(this, "YOUR_PROJECT_OR_KEY_NAME", 0);
 try {
-    result = sc.getUrlContent(Var.Redmine_Projects_URL, data);
+    result = sc.getUrlContent(URL_STRING, DATA_STRING);
 } catch (SimpleContent.ApiException e) {
     e.printStackTrace();
 }
